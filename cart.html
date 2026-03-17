@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopping Bag — MAISON</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.cart-layout{display:grid;grid-template-columns:1fr 360px;gap:3rem;padding:2.5rem;align-items:start}
+.cart-item{display:grid;grid-template-columns:110px 1fr auto;gap:1.5rem;align-items:start;background:#fff;padding:1.2rem;border:1px solid var(--light);margin-bottom:1.2rem}
+.cart-item-img{aspect-ratio:3/4;overflow:hidden}
+.cart-item-img img{width:100%;height:100%;object-fit:cover;display:block}
+.cart-item-name{font-family:var(--font-serif);font-size:1rem;margin-bottom:0.3rem}
+.cart-item-meta{font-size:0.78rem;color:var(--mid);margin-bottom:0.8rem}
+.cart-item-price{color:var(--gold);font-size:0.95rem;font-weight:500}
+.cart-remove{background:none;border:none;cursor:pointer;color:#aaa;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;padding:0;margin-top:0.5rem;display:block}
+.cart-remove:hover{color:#8b1a1a}
+.qty-mini{display:flex;align-items:center;border:1px solid var(--light);display:inline-flex;margin-bottom:0.5rem}
+.qty-mini button{width:28px;height:28px;border:none;background:none;cursor:pointer;font-size:0.9rem;transition:background 0.2s}
+.qty-mini button:hover{background:var(--light)}
+.qty-mini span{width:32px;text-align:center;font-size:0.82rem}
+.promo-input{display:flex;gap:0.5rem;margin:1.2rem 0}
+.promo-input input{flex:1;border:1px solid var(--light);padding:0.6rem 1rem;font-family:var(--font-sans);font-size:0.8rem;outline:none}
+.promo-input button{background:var(--dark);color:#fff;border:none;padding:0.6rem 1rem;cursor:pointer;font-size:0.8rem;font-family:var(--font-sans)}
+.free-ship-bar{background:var(--cream);border:1px solid var(--light);padding:0.8rem 1rem;font-size:0.8rem;color:var(--mid);margin-bottom:1rem;border-left:3px solid var(--gold)}
+.item-unit{font-size:0.78rem;color:var(--mid);text-align:right}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">MAISON</a>
+  <div class="nav-links">
+    <a href="shop.html">← Continue Shopping</a>
+  </div>
+  <div class="nav-right">
+    <a class="nav-icon" href="wishlist.html">♡</a>
+    <a class="nav-icon" href="cart.html">🛍 <span class="cart-count" id="cart-count">0</span></a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Shopping Bag</h1>
+  <p id="cart-header-count">0 items</p>
+</div>
+
+<div id="cart-root"></div>
+
+<footer>
+  <div class="footer-bottom" style="border-top:none;padding-top:0">
+    <span>© 2025 MAISON.</span>
+    <a href="index.html" style="color:var(--gold)">← Back to Home</a>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="data.js"></script>
+<script>
+const PRODUCT_IMAGES = {
+  1:'https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=400&q=80',
+  2:'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80',
+  3:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80',
+  4:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&q=80',
+  5:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80',
+  6:'https://images.unsplash.com/photo-1583496661160-fb5974ca0703?w=400&q=80',
+  7:'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=400&q=80',
+  8:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&q=80',
+  9:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&q=80',
+  10:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=400&q=80',
+  11:'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=400&q=80',
+  12:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400&q=80',
+};
+
+function render() {
+  const cart = getCart();
+  const root = document.getElementById('cart-root');
+  const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
+  const itemCount = cart.reduce((s,i) => s + i.qty, 0);
+  document.getElementById('cart-header-count').textContent = `${itemCount} item${itemCount !== 1 ? 's' : ''}`;
+  updateCartBadge();
+
+  if (!cart.length) {
+    root.innerHTML = `<div class="empty-state">
+      <div class="icon">🛍</div>
+      <h2>Your bag is empty</h2>
+      <p>Discover our collection and add something you love.</p>
+      <a class="btn-primary" href="shop.html">Shop Now</a>
+    </div>`;
+    return;
+  }
+
+  const remaining = 5000 - total;
+  const freeShipBar = remaining > 0
+    ? `<div class="free-ship-bar">Add ₹${remaining.toLocaleString('en-IN')} more for <strong>free shipping</strong></div>`
+    : `<div class="free-ship-bar" style="border-left-color:green">✓ You qualify for <strong>free shipping</strong></div>`;
+
+  root.innerHTML = `<div class="cart-layout">
+    <div>
+      <div id="items-list"></div>
+    </div>
+    <div class="order-summary">
+      <div class="summary-title">Order Summary</div>
+      ${freeShipBar}
+      <div id="summary-items"></div>
+      <div class="summary-row"><span>Subtotal</span><span>₹${total.toLocaleString('en-IN')}</span></div>
+      <div class="summary-row"><span>Shipping</span><span style="color:${total>=5000?'green':'var(--mid)'}">${total>=5000?'Free':'Calculated at checkout'}</span></div>
+      <div class="summary-row"><span>GST (18%)</span><span>₹${Math.round(total*0.18).toLocaleString('en-IN')}</span></div>
+      <div class="promo-input">
+        <input type="text" placeholder="Promo code" id="promo-code">
+        <button onclick="applyPromo()">Apply</button>
+      </div>
+      <div class="summary-total"><span>Total</span><span>₹${Math.round(total*1.18).toLocaleString('en-IN')}</span></div>
+      <a class="btn-gold" href="checkout.html" style="width:100%;margin-top:1.2rem;padding:1rem;text-align:center;display:block;text-decoration:none">Proceed to Checkout</a>
+      <a class="btn-outline" href="shop.html" style="width:100%;margin-top:0.8rem;padding:1rem;text-align:center;display:block;text-decoration:none">Continue Shopping</a>
+    </div>
+  </div>`;
+
+  const list = document.getElementById('items-list');
+  cart.forEach((item, idx) => {
+    const imgSrc = item.img || PRODUCT_IMAGES[item.id] || '';
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <div class="cart-item-img">
+        <img src="${imgSrc}" alt="${item.name}">
+      </div>
+      <div>
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-meta">Size: ${item.size}</div>
+        <div class="qty-mini">
+          <button onclick="updateQty(${idx},-1)">−</button>
+          <span>${item.qty}</span>
+          <button onclick="updateQty(${idx},1)">+</button>
+        </div>
+        <div class="cart-item-price">₹${(item.price*item.qty).toLocaleString('en-IN')}</div>
+        <button class="cart-remove" onclick="removeItem(${idx})">Remove</button>
+      </div>
+      <div class="item-unit">₹${item.price.toLocaleString('en-IN')}<br><small>each</small></div>`;
+    list.appendChild(div);
+  });
+
+  document.getElementById('summary-items').innerHTML = cart.map(i =>
+    `<div class="summary-row"><span>${i.name} ×${i.qty}</span><span>₹${(i.price*i.qty).toLocaleString('en-IN')}</span></div>`
+  ).join('');
+}
+
+function updateQty(idx, d) {
+  const cart = getCart();
+  cart[idx].qty = Math.max(1, cart[idx].qty + d);
+  saveCart(cart);
+  render();
+}
+function removeItem(idx) {
+  const cart = getCart();
+  const name = cart[idx].name;
+  cart.splice(idx, 1);
+  saveCart(cart);
+  render();
+  showToast(`${name} removed from bag`);
+}
+function applyPromo() {
+  const code = document.getElementById('promo-code').value.trim().toUpperCase();
+  if (code === 'MAISON10') showToast('10% discount applied! 🎉');
+  else showToast('Invalid promo code');
+}
+
+render();
+</script>
+</body>
+</html>
