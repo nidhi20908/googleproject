@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — MAISON</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.shop-layout{display:grid;grid-template-columns:220px 1fr;gap:2.5rem;padding:2.5rem}
+.sidebar{position:sticky;top:80px;align-self:start}
+.sidebar-section{margin-bottom:2rem;border-bottom:1px solid var(--light);padding-bottom:1.5rem}
+.sidebar-title{font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--mid);margin-bottom:1rem}
+.sidebar-link{display:block;font-size:0.88rem;padding:0.35rem 0;color:var(--dark);text-decoration:none;cursor:pointer;transition:color 0.2s;border:none;background:none;font-family:var(--font-sans);text-align:left;width:100%}
+.sidebar-link:hover,.sidebar-link.active{color:var(--gold);font-weight:500}
+.price-range{width:100%;accent-color:var(--gold)}
+.price-labels{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--mid);margin-top:0.5rem}
+.color-dots{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem}
+.color-dot{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s}
+.color-dot.active,.color-dot:hover{border-color:var(--dark)}
+.results-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;font-size:0.85rem;color:var(--mid)}
+.product-count{font-size:0.85rem;color:var(--mid)}
+.view-toggle{display:flex;gap:0.5rem}
+.view-btn{background:none;border:1px solid var(--light);padding:0.4rem 0.7rem;cursor:pointer;font-size:0.8rem;transition:all 0.2s}
+.view-btn.active{background:var(--dark);color:#fff;border-color:var(--dark)}
+.product-grid.grid-2{grid-template-columns:repeat(2,1fr)}
+.product-grid.grid-3{grid-template-columns:repeat(3,1fr)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">MAISON</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="shop.html?cat=Women">Women</a>
+    <a href="shop.html?cat=Men">Men</a>
+    <a href="shop.html?cat=Accessories">Accessories</a>
+  </div>
+  <div class="nav-right">
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" placeholder="Search..." id="shop-search" oninput="filterProducts()">
+    </div>
+    <a class="nav-icon" href="wishlist.html">♡</a>
+    <a class="nav-icon" href="cart.html">🛍 <span class="cart-count" id="cart-count">0</span></a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1 id="page-title">Full Collection</h1>
+  <p id="page-sub">Timeless pieces for every moment</p>
+</div>
+
+<div class="shop-layout">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Category</div>
+      <button class="sidebar-link active" onclick="setFilter('All',this)">All Products</button>
+      <button class="sidebar-link" onclick="setFilter('Women',this)">Women</button>
+      <button class="sidebar-link" onclick="setFilter('Men',this)">Men</button>
+      <button class="sidebar-link" onclick="setFilter('Accessories',this)">Accessories</button>
+      <button class="sidebar-link" onclick="setFilter('New',this)">New Arrivals</button>
+      <button class="sidebar-link" onclick="setFilter('Sale',this)">Sale Items</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Price Range</div>
+      <input type="range" class="price-range" id="price-range" min="0" max="50000" value="50000" step="500" oninput="updatePrice(this.value)">
+      <div class="price-labels"><span>₹0</span><span id="price-max">₹50,000</span></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Sort By</div>
+      <select class="sort-select" id="sort-select" onchange="filterProducts()" style="width:100%;margin:0">
+        <option value="default">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="name">Name A–Z</option>
+        <option value="newest">Newest First</option>
+      </select>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Quick Filters</div>
+      <button class="sidebar-link" onclick="setFilter('Sale',this)">🏷 On Sale</button>
+      <button class="sidebar-link" onclick="setFilter('New',this)">✨ New In</button>
+    </div>
+  </aside>
+
+  <main>
+    <div class="results-bar">
+      <span class="product-count" id="product-count">12 products</span>
+      <div style="display:flex;align-items:center;gap:1rem">
+        <div class="view-toggle">
+          <button class="view-btn active" onclick="setView(3,this)">▦</button>
+          <button class="view-btn" onclick="setView(2,this)">▬</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-grid grid-3" id="shop-grid"></div>
+  </main>
+</div>
+
+<footer>
+  <div class="footer-bottom" style="border-top:none;padding-top:0">
+    <span>© 2025 MAISON.</span>
+    <a href="index.html" style="color:var(--gold)">← Back to Home</a>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="data.js"></script>
+<script>
+const PRODUCT_IMAGES = {
+  1:'https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=600&q=80',
+  2:'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&q=80',
+  3:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80',
+  4:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80',
+  5:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80',
+  6:'https://images.unsplash.com/photo-1583496661160-fb5974ca0703?w=600&q=80',
+  7:'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&q=80',
+  8:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&q=80',
+  9:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',
+  10:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80',
+  11:'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=600&q=80',
+  12:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80',
+};
+
+let currentFilter = 'All';
+let maxPrice = 50000;
+
+function init() {
+  const params = new URLSearchParams(location.search);
+  const cat = params.get('cat');
+  const search = params.get('search');
+  if (cat) {
+    currentFilter = cat;
+    document.querySelectorAll('.sidebar-link').forEach(b => {
+      b.classList.toggle('active', b.textContent.trim() === cat || (cat==='New' && b.textContent.includes('New')) || (cat==='Sale' && b.textContent.includes('Sale')));
+    });
+    document.getElementById('page-title').textContent = cat === 'New' ? 'New Arrivals' : cat === 'Sale' ? 'Sale Items' : cat + ' Collection';
+  }
+  if (search) {
+    document.getElementById('shop-search').value = search;
+  }
+  filterProducts();
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterProducts();
+}
+
+function updatePrice(val) {
+  maxPrice = parseInt(val);
+  document.getElementById('price-max').textContent = '₹' + parseInt(val).toLocaleString('en-IN');
+  filterProducts();
+}
+
+function setView(cols, btn) {
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const g = document.getElementById('shop-grid');
+  g.className = `product-grid grid-${cols}`;
+}
+
+function filterProducts() {
+  const search = document.getElementById('shop-search').value.toLowerCase();
+  const sort = document.getElementById('sort-select').value;
+  let filtered = PRODUCTS.filter(p => {
+    const matchCat = currentFilter==='All' || p.category===currentFilter || (currentFilter==='New'&&p.badge==='New') || (currentFilter==='Sale'&&p.badge==='Sale');
+    const matchSearch = !search || p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search);
+    const matchPrice = (p.salePrice||p.price) <= maxPrice;
+    return matchCat && matchSearch && matchPrice;
+  });
+  if (sort==='price-asc') filtered.sort((a,b)=>(a.salePrice||a.price)-(b.salePrice||b.price));
+  if (sort==='price-desc') filtered.sort((a,b)=>(b.salePrice||b.price)-(a.salePrice||a.price));
+  if (sort==='name') filtered.sort((a,b)=>a.name.localeCompare(b.name));
+  if (sort==='newest') filtered.sort((a,b)=>(a.badge==='New'?-1:1));
+  const g = document.getElementById('shop-grid');
+  g.innerHTML = '';
+  document.getElementById('product-count').textContent = `${filtered.length} product${filtered.length!==1?'s':''}`;
+  if (!filtered.length) {
+    g.innerHTML = '<p style="color:var(--mid);grid-column:1/-1;padding:3rem 0;text-align:center">No products match your filters.</p>';
+    return;
+  }
+  filtered.forEach(p => renderCard(p, g));
+}
+
+function renderCard(p, container) {
+  const wish = getWishlist();
+  const inWish = wish.includes(p.id);
+  const priceHTML = p.salePrice
+    ? `<span style="color:#8b1a1a">₹${p.salePrice.toLocaleString('en-IN')}</span> <s>₹${p.price.toLocaleString('en-IN')}</s>`
+    : `₹${p.price.toLocaleString('en-IN')}`;
+  const div = document.createElement('div');
+  div.className = 'product-card';
+  div.innerHTML = `
+    <div class="product-img">
+      <img src="${PRODUCT_IMAGES[p.id]}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy">
+      ${p.badge?`<div class="product-badge ${p.badge==='Sale'?'sale':''}">${p.badge}</div>`:''}
+      <button class="wishlist-btn ${inWish?'active':''}" onclick="toggleWish(event,${p.id},this)">${inWish?'♥':'♡'}</button>
+      <div class="product-actions">
+        <button onclick="quickAdd(event,${p.id})">Quick Add</button>
+        <button onclick="location.href='product.html?id=${p.id}'">View Details</button>
+      </div>
+    </div>
+    <div class="product-brand">${p.brand}</div>
+    <div class="product-name"><a href="product.html?id=${p.id}" style="text-decoration:none;color:inherit">${p.name}</a></div>
+    <div class="product-price">${priceHTML}</div>`;
+  container.appendChild(div);
+}
+
+function toggleWish(e, id, btn) {
+  e.stopPropagation();
+  let wish = getWishlist();
+  if (wish.includes(id)) { wish = wish.filter(x => x !== id); btn.textContent='♡'; btn.classList.remove('active'); }
+  else { wish.push(id); btn.textContent='♥'; btn.classList.add('active'); }
+  saveWishlist(wish);
+  showToast(wish.includes(id) ? 'Added to wishlist' : 'Removed from wishlist');
+}
+
+function quickAdd(e, id) {
+  e.stopPropagation();
+  const p = PRODUCTS.find(x => x.id === id);
+  const cart = getCart();
+  const ex = cart.find(c => c.id === p.id && c.size === p.sizes[0]);
+  if (ex) ex.qty++;
+  else cart.push({id:p.id,name:p.name,price:p.salePrice||p.price,size:p.sizes[0],color:p.colors[0],qty:1,img:PRODUCT_IMAGES[p.id]});
+  saveCart(cart);
+  updateCartBadge();
+  showToast(`${p.name} added to bag`);
+}
+
+init();
+updateCartBadge();
+</script>
+</body>
+</html>
