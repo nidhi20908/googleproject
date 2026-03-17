@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — MAISON</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.checkout-layout{display:grid;grid-template-columns:1fr 380px;gap:3rem;padding:2.5rem;align-items:start}
+.checkout-form{background:#fff;border:1px solid var(--light);padding:2rem}
+.form-title{font-family:var(--font-serif);font-size:1.5rem;font-weight:300;margin-bottom:1.5rem}
+.pay-methods{display:flex;gap:0.8rem;margin-bottom:1.5rem}
+.pay-method{flex:1;border:1px solid var(--light);padding:0.8rem;cursor:pointer;text-align:center;font-size:0.78rem;transition:all 0.2s;font-family:var(--font-sans)}
+.pay-method.active{border-color:var(--dark);background:var(--dark);color:#fff}
+.step-indicator{display:flex;margin-bottom:2rem;border-bottom:1px solid var(--light);padding-bottom:1rem}
+.step{flex:1;text-align:center;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);position:relative}
+.step.active{color:var(--gold);font-weight:500}
+.step.done{color:var(--dark)}
+.step::after{content:'';position:absolute;bottom:-1rem;left:0;right:0;height:2px;background:transparent}
+.step.active::after{background:var(--gold)}
+.step.done::after{background:var(--dark)}
+.checkout-img{width:60px;height:75px;overflow:hidden;border:1px solid var(--light)}
+.checkout-img img{width:100%;height:100%;object-fit:cover}
+.summary-product{display:flex;gap:1rem;align-items:center;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--light)}
+.secure-badges{display:flex;gap:0.8rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--light)}
+.secure-badge{flex:1;text-align:center;font-size:0.68rem;color:var(--mid);padding:0.5rem;border:1px solid var(--light)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">MAISON</a>
+  <div class="nav-links">
+    <a href="cart.html">← Back to Bag</a>
+  </div>
+  <div class="nav-right">
+    <span style="color:#aaa;font-size:0.78rem;letter-spacing:0.1em">🔒 SECURE CHECKOUT</span>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Checkout</h1>
+  <p>Secure & encrypted — your data is always protected</p>
+</div>
+
+<div class="checkout-layout">
+  <div class="checkout-form">
+    <div class="step-indicator">
+      <div class="step active">1. Information</div>
+      <div class="step">2. Shipping</div>
+      <div class="step">3. Payment</div>
+    </div>
+
+    <div class="section-divider">Contact Information</div>
+    <div class="form-grid">
+      <div class="form-group"><label>First Name *</label><input type="text" id="fname" placeholder="Priya"></div>
+      <div class="form-group"><label>Last Name *</label><input type="text" id="lname" placeholder="Sharma"></div>
+    </div>
+    <div class="form-group"><label>Email Address *</label><input type="email" id="email" placeholder="priya@example.com"></div>
+    <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" placeholder="+91 98765 43210"></div>
+
+    <div class="section-divider">Shipping Address</div>
+    <div class="form-group"><label>Street Address *</label><input type="text" id="address" placeholder="123, MG Road"></div>
+    <div class="form-group"><label>Apartment / Suite</label><input type="text" placeholder="Flat 4B (optional)"></div>
+    <div class="form-grid">
+      <div class="form-group"><label>City *</label><input type="text" id="city" placeholder="Bengaluru"></div>
+      <div class="form-group"><label>Postal Code *</label><input type="text" id="pin" placeholder="560001" maxlength="6"></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>State</label>
+        <select id="state">
+          <option>Karnataka</option><option>Maharashtra</option><option>Delhi</option>
+          <option>Tamil Nadu</option><option>Telangana</option><option>Gujarat</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Country</label>
+        <select>
+          <option>India</option><option>United Kingdom</option><option>United States</option>
+          <option>France</option><option>Germany</option><option>Singapore</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section-divider">Payment Method</div>
+    <div class="pay-methods">
+      <div class="pay-method active" onclick="selectPay(this)">💳 Card</div>
+      <div class="pay-method" onclick="selectPay(this)">📱 UPI</div>
+      <div class="pay-method" onclick="selectPay(this)">🏦 Net Banking</div>
+      <div class="pay-method" onclick="selectPay(this)">PayPal</div>
+    </div>
+
+    <div id="payment-fields">
+      <div class="form-group"><label>Card Number *</label><input type="text" id="card" placeholder="4111 1111 1111 1111" maxlength="19" oninput="formatCard(this)"></div>
+      <div class="form-grid">
+        <div class="form-group"><label>Expiry *</label><input type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)"></div>
+        <div class="form-group"><label>CVV *</label><input type="password" placeholder="•••" maxlength="4"></div>
+      </div>
+      <div class="form-group"><label>Name on Card</label><input type="text" placeholder="PRIYA SHARMA"></div>
+    </div>
+
+    <div style="margin-top:1.5rem">
+      <button class="btn-gold" style="width:100%;padding:1.1rem;font-size:0.85rem" onclick="placeOrder()">Place Order →</button>
+    </div>
+
+    <div class="secure-badges">
+      <div class="secure-badge">🔒 SSL Secure</div>
+      <div class="secure-badge">✓ PCI Compliant</div>
+      <div class="secure-badge">↩ 30-Day Returns</div>
+      <div class="secure-badge">🚚 Free Shipping</div>
+    </div>
+  </div>
+
+  <div class="order-summary">
+    <div class="summary-title">Your Order</div>
+    <div id="co-items"></div>
+    <div class="summary-row"><span>Subtotal</span><span id="co-sub">₹0</span></div>
+    <div class="summary-row"><span>Shipping</span><span style="color:green">Free</span></div>
+    <div class="summary-row"><span>GST (18%)</span><span id="co-tax">₹0</span></div>
+    <div class="promo-input">
+      <input type="text" placeholder="Promo code" id="promo">
+      <button onclick="applyPromo()">Apply</button>
+    </div>
+    <div class="summary-total"><span>Total</span><span id="co-total">₹0</span></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bottom" style="border-top:none;padding-top:0">
+    <span>© 2025 MAISON. All payments are secure and encrypted.</span>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="data.js"></script>
+<script>
+const PRODUCT_IMAGES = {1:'https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=200&q=80',2:'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=200&q=80',3:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&q=80',4:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=200&q=80',5:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&q=80',6:'https://images.unsplash.com/photo-1583496661160-fb5974ca0703?w=200&q=80',7:'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=200&q=80',8:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&q=80',9:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=200&q=80',10:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=200&q=80',11:'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=200&q=80',12:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200&q=80'};
+
+function init() {
+  const cart = getCart();
+  if (!cart.length) { location.href = 'cart.html'; return; }
+  const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
+  const tax = Math.round(total * 0.18);
+  document.getElementById('co-sub').textContent = '₹' + total.toLocaleString('en-IN');
+  document.getElementById('co-tax').textContent = '₹' + tax.toLocaleString('en-IN');
+  document.getElementById('co-total').textContent = '₹' + (total + tax).toLocaleString('en-IN');
+  const items = document.getElementById('co-items');
+  cart.forEach(item => {
+    const imgSrc = item.img || PRODUCT_IMAGES[item.id] || '';
+    const div = document.createElement('div');
+    div.className = 'summary-product';
+    div.innerHTML = `
+      <div class="checkout-img"><img src="${imgSrc}" alt="${item.name}"></div>
+      <div style="flex:1">
+        <div style="font-size:0.88rem;font-weight:500">${item.name}</div>
+        <div style="font-size:0.75rem;color:var(--mid)">Size: ${item.size} · Qty: ${item.qty}</div>
+      </div>
+      <div style="font-size:0.88rem;color:var(--gold)">₹${(item.price*item.qty).toLocaleString('en-IN')}</div>`;
+    items.appendChild(div);
+  });
+  updateCartBadge();
+}
+
+function selectPay(el) {
+  document.querySelectorAll('.pay-method').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+}
+function formatCard(input) {
+  let v = input.value.replace(/\D/g,'').substring(0,16);
+  input.value = v.match(/.{1,4}/g)?.join(' ') || v;
+}
+function formatExpiry(input) {
+  let v = input.value.replace(/\D/g,'');
+  if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2,4);
+  input.value = v;
+}
+function applyPromo() {
+  const code = document.getElementById('promo').value.trim().toUpperCase();
+  showToast(code === 'MAISON10' ? '10% discount applied! 🎉' : 'Invalid promo code');
+}
+function placeOrder() {
+  const fname = document.getElementById('fname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const address = document.getElementById('address').value.trim();
+  if (!fname || !email || !address) { showToast('Please fill in all required fields'); return; }
+  saveCart([]);
+  const orderNum = Math.floor(100000 + Math.random() * 900000);
+  location.href = `success.html?order=${orderNum}&name=${encodeURIComponent(fname)}`;
+}
+
+init();
+</script>
+</body>
+</html>
