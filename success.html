@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Confirmed — MAISON</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.success-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:4rem 2rem;min-height:70vh}
+.success-box{max-width:580px;width:100%;text-align:center;background:#fff;border:1px solid var(--light);padding:3.5rem}
+.success-icon{width:72px;height:72px;border-radius:50%;background:#f0f7f0;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 1.5rem}
+.success-box h1{font-family:var(--font-serif);font-size:2.8rem;font-weight:300;margin-bottom:0.8rem}
+.success-box p{color:var(--mid);line-height:1.8;margin-bottom:1rem}
+.order-ref{font-size:0.85rem;color:var(--gold);letter-spacing:0.1em;margin-bottom:2rem;font-weight:500}
+.steps-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:2rem 0;text-align:center}
+.order-step{padding:1.2rem;border:1px solid var(--light)}
+.order-step .num{font-family:var(--font-serif);font-size:1.5rem;color:var(--gold);margin-bottom:0.4rem}
+.order-step .label{font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid)}
+.cta-row{display:flex;gap:1rem;justify-content:center;margin-top:2rem}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">MAISON</a>
+  <div class="nav-right"></div>
+</nav>
+
+<div class="success-wrap">
+  <div class="success-box">
+    <div class="success-icon">✓</div>
+    <h1>Order Confirmed</h1>
+    <p>Thank you, <strong id="cust-name">valued customer</strong>. Your order has been received and is being prepared with care by our team.</p>
+    <p>A confirmation email will be sent to you shortly with tracking details.</p>
+    <div class="order-ref">Order Reference: #MSN-<span id="order-num">------</span></div>
+
+    <div class="steps-row">
+      <div class="order-step">
+        <div class="num">1</div>
+        <div class="label">Order Confirmed</div>
+      </div>
+      <div class="order-step" style="border-color:var(--light);opacity:0.5">
+        <div class="num">2</div>
+        <div class="label">Being Packed</div>
+      </div>
+      <div class="order-step" style="border-color:var(--light);opacity:0.5">
+        <div class="num">3</div>
+        <div class="label">Out for Delivery</div>
+      </div>
+    </div>
+
+    <p style="font-size:0.82rem">Estimated delivery: <strong>3–5 working days</strong></p>
+
+    <div class="cta-row">
+      <a class="btn-primary" href="index.html">Continue Shopping</a>
+      <a class="btn-outline" href="shop.html">View Collection</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bottom" style="border-top:none;padding-top:0">
+    <span>© 2025 MAISON. Thank you for your purchase.</span>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="data.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const order = params.get('order') || Math.floor(100000 + Math.random() * 900000);
+const name = params.get('name') || '';
+document.getElementById('order-num').textContent = order;
+if (name) document.getElementById('cust-name').textContent = name;
+updateCartBadge();
+</script>
+</body>
+</html>
