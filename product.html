@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product — MAISON</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.breadcrumb{padding:1rem 2.5rem;font-size:0.8rem;color:var(--mid)}
+.breadcrumb a{color:var(--mid);text-decoration:none}
+.breadcrumb a:hover{color:var(--gold)}
+.detail-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;padding:0 2.5rem 3rem;align-items:start}
+.detail-images{display:flex;gap:1rem;position:sticky;top:80px}
+.thumb-col{display:flex;flex-direction:column;gap:0.8rem}
+.thumb{width:72px;height:90px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s;flex-shrink:0}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb.active{border-color:var(--dark)}
+.main-img{flex:1;aspect-ratio:3/4;overflow:hidden;background:var(--light)}
+.main-img img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity 0.3s}
+.detail-info{padding-top:0.5rem}
+.detail-brand{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem}
+.detail-name{font-family:var(--font-serif);font-size:2.5rem;font-weight:300;line-height:1.2;margin-bottom:0.5rem}
+.detail-rating{display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;color:var(--gold);font-size:0.9rem}
+.detail-rating span{color:var(--mid);font-size:0.8rem;cursor:pointer;text-decoration:underline}
+.detail-price{font-size:2rem;margin-bottom:1.5rem;font-family:var(--font-serif)}
+.detail-divider{border:none;border-top:1px solid var(--light);margin:1.5rem 0}
+.size-label{font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.8rem;color:var(--mid);display:flex;justify-content:space-between}
+.size-label a{color:var(--gold);text-decoration:none;cursor:pointer}
+.size-grid{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.size-btn{min-width:44px;height:44px;padding:0 0.6rem;border:1px solid var(--light);background:none;cursor:pointer;font-size:0.8rem;font-family:var(--font-sans);transition:all 0.2s}
+.size-btn.active{background:var(--dark);color:#fff;border-color:var(--dark)}
+.size-btn.unavail{color:#ccc;cursor:not-allowed;text-decoration:line-through}
+.size-btn:hover:not(.unavail):not(.active){border-color:var(--dark)}
+.color-grid{display:flex;gap:0.6rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.color-swatch{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s;outline:2px solid transparent;outline-offset:2px}
+.color-swatch.active{outline-color:var(--dark)}
+.qty-row{display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem}
+.qty-ctrl{display:flex;align-items:center;border:1px solid var(--light)}
+.qty-ctrl button{width:38px;height:38px;border:none;background:none;cursor:pointer;font-size:1.1rem;transition:background 0.2s;font-family:var(--font-sans)}
+.qty-ctrl button:hover{background:var(--light)}
+.qty-ctrl span{width:44px;text-align:center;font-size:0.9rem;font-weight:500}
+.detail-btns{display:flex;gap:1rem;margin-bottom:1.5rem}
+.trust-row{display:flex;gap:1.5rem;margin-bottom:1.5rem}
+.trust-item{display:flex;align-items:center;gap:0.4rem;font-size:0.75rem;color:var(--mid)}
+.reviews-section{padding:3rem 2.5rem;background:#fff;margin-top:1rem}
+.reviews-header{display:flex;align-items:center;gap:2rem;margin-bottom:2rem}
+.reviews-score{text-align:center}
+.reviews-score .big{font-family:var(--font-serif);font-size:4rem;font-weight:300;color:var(--dark);line-height:1}
+.reviews-score .stars{color:var(--gold);font-size:1.2rem;margin:0.3rem 0}
+.reviews-score .count{font-size:0.8rem;color:var(--mid)}
+.review-card{border:1px solid var(--light);padding:1.5rem;margin-bottom:1rem}
+.review-head{display:flex;justify-content:space-between;margin-bottom:0.5rem}
+.review-name{font-weight:500;font-size:0.9rem}
+.review-date{font-size:0.78rem;color:var(--mid)}
+.review-stars{color:var(--gold);font-size:0.85rem;margin-bottom:0.5rem}
+.review-text{font-size:0.88rem;color:var(--mid);line-height:1.7}
+.related-section{padding:3rem 2.5rem}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">MAISON</a>
+  <div class="nav-links">
+    <a href="shop.html">← Back to Shop</a>
+  </div>
+  <div class="nav-right">
+    <a class="nav-icon" href="wishlist.html">♡</a>
+    <a class="nav-icon" href="cart.html">🛍 <span class="cart-count" id="cart-count">0</span></a>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="index.html">Home</a> / <a href="shop.html">Shop</a> / <span id="bc-name">Product</span>
+</div>
+
+<div class="detail-layout" id="detail-layout"></div>
+
+<div class="reviews-section">
+  <h2 style="font-family:var(--font-serif);font-size:1.8rem;font-weight:300;margin-bottom:1.5rem">Customer Reviews</h2>
+  <div class="reviews-header">
+    <div class="reviews-score">
+      <div class="big">4.3</div>
+      <div class="stars">★★★★☆</div>
+      <div class="count">42 reviews</div>
+    </div>
+    <div style="flex:1">
+      <div id="rating-bars"></div>
+    </div>
+  </div>
+  <div id="reviews-list"></div>
+</div>
+
+<div class="related-section">
+  <div class="section-title">You May Also Like</div>
+  <div class="section-sub">Curated to complement your selection</div>
+  <div class="product-grid" id="related-grid" style="grid-template-columns:repeat(4,1fr)"></div>
+</div>
+
+<footer>
+  <div class="footer-bottom" style="border-top:none;padding-top:0">
+    <span>© 2025 MAISON.</span>
+    <a href="shop.html" style="color:var(--gold)">← Continue Shopping</a>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="data.js"></script>
+<script>
+const PRODUCT_IMAGES = {
+  1:'https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=800&q=80',
+  2:'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=800&q=80',
+  3:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80',
+  4:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&q=80',
+  5:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80',
+  6:'https://images.unsplash.com/photo-1583496661160-fb5974ca0703?w=800&q=80',
+  7:'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=800&q=80',
+  8:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=800&q=80',
+  9:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=800&q=80',
+  10:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=800&q=80',
+  11:'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=800&q=80',
+  12:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&q=80',
+};
+const ALT_IMAGES = {
+  1:['https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80','https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80'],
+  2:['https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80','https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&q=80'],
+  3:['https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&q=80','https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80'],
+  4:['https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80','https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80'],
+  5:['https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80','https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80'],
+  6:['https://images.unsplash.com/photo-1583496661160-fb5974ca0703?w=600&q=80','https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80'],
+  7:['https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&q=80','https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80'],
+  8:['https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&q=80','https://images.unsplash.com/photo-1518007686-b6a40f79c55b?w=600&q=80'],
+  9:['https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80','https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80'],
+  10:['https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80','https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?w=600&q=80'],
+  11:['https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=600&q=80','https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80'],
+  12:['https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80','https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80'],
+};
+
+const REVIEWS = [
+  {name:'Priya M.',stars:5,date:'Feb 2025',text:'Absolutely beautiful quality. The fabric feels incredibly luxurious and the fit is perfect. Will definitely be ordering more pieces.'},
+  {name:'James R.',stars:4,date:'Jan 2025',text:'Very happy with this purchase. Arrived quickly and was packaged beautifully. Slight sizing up needed but the quality is exceptional.'},
+  {name:'Ananya S.',stars:5,date:'Dec 2024',text:'This exceeded all my expectations. The craftsmanship is evident in every detail. I have received so many compliments wearing this.'},
+];
+
+const BARS = [[5,62],[4,24],[3,8],[2,4],[1,2]];
+
+let selectedSize = null;
+let selectedColor = 0;
+let selectedQty = 1;
+let p = null;
+
+function init() {
+  const id = parseInt(new URLSearchParams(location.search).get('id')) || 1;
+  p = PRODUCTS.find(x => x.id === id);
+  if (!p) { location.href = 'shop.html'; return; }
+
+  document.title = p.name + ' — MAISON';
+  document.getElementById('bc-name').textContent = p.name;
+
+  const allImgs = [PRODUCT_IMAGES[p.id], ...(ALT_IMAGES[p.id]||[])];
+  const price = p.salePrice
+    ? `<span style="color:#8b1a1a">₹${p.salePrice.toLocaleString('en-IN')}</span> <s style="font-size:1.2rem;color:#aaa;font-family:var(--font-sans)">₹${p.price.toLocaleString('en-IN')}</s>`
+    : `₹${p.price.toLocaleString('en-IN')}`;
+
+  const sizes = p.sizes.map((s,i) => `<button class="size-btn ${i===5?'unavail':''}" onclick="selectSize('${s}',this)">${s}</button>`).join('');
+  const colors = p.colors.map((c,i) => `<div class="color-swatch ${i===0?'active':''}" style="background:${c};border-color:${c==='#f9f6f0'?'#ccc':'transparent'}" onclick="selectColor(${i},this)" title="Colour ${i+1}"></div>`).join('');
+  const thumbs = allImgs.map((img,i) => `<div class="thumb ${i===0?'active':''}" onclick="switchImg('${img}',this)"><img src="${img}" alt="View ${i+1}"></div>`).join('');
+
+  document.getElementById('detail-layout').innerHTML = `
+    <div class="detail-images">
+      <div class="thumb-col">${thumbs}</div>
+      <div class="main-img"><img id="main-img" src="${allImgs[0]}" alt="${p.name}"></div>
+    </div>
+    <div class="detail-info">
+      <div class="detail-brand">${p.brand}</div>
+      <div class="detail-name">${p.name}</div>
+      <div class="detail-rating">★★★★☆ <span onclick="document.querySelector('.reviews-section').scrollIntoView({behavior:'smooth'})">42 reviews</span></div>
+      <div class="detail-price">${price}</div>
+      <hr class="detail-divider">
+      <div class="size-label"><span>Select Size</span><a onclick="showToast('Size guide coming soon')">Size Guide</a></div>
+      <div class="size-grid" id="size-grid">${sizes}</div>
+      <div class="size-label"><span>Colour</span></div>
+      <div class="color-grid">${colors}</div>
+      <div class="qty-row">
+        <div class="size-label" style="margin:0">Quantity</div>
+        <div class="qty-ctrl">
+          <button onclick="changeQty(-1)">−</button>
+          <span id="qty-display">1</span>
+          <button onclick="changeQty(1)">+</button>
+        </div>
+      </div>
+      <div class="detail-btns">
+        <button class="btn-dark" onclick="addToCart()">Add to Bag</button>
+        <button class="btn-gold" onclick="buyNow()">Buy Now</button>
+      </div>
+      <div class="trust-row">
+        <div class="trust-item">🚚 Free shipping over ₹5,000</div>
+        <div class="trust-item">↩ 30-day returns</div>
+        <div class="trust-item">🔒 Secure checkout</div>
+      </div>
+      <div class="accordion">
+        <div class="accordion-item">
+          <div class="accordion-head" onclick="toggleAcc(this)">Description <span>+</span></div>
+          <div class="accordion-body">${p.desc}</div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-head" onclick="toggleAcc(this)">Size & Fit <span>+</span></div>
+          <div class="accordion-body">Model is 5'9" and wears size S/M. True to size. For a relaxed fit, size up one. All measurements are taken flat. Care: Dry clean recommended.</div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-head" onclick="toggleAcc(this)">Materials & Care <span>+</span></div>
+          <div class="accordion-body">Crafted from the finest natural fibres. Please follow care label instructions. Store hanging or folded in a breathable garment bag.</div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-head" onclick="toggleAcc(this)">Delivery & Returns <span>+</span></div>
+          <div class="accordion-body">Standard delivery 3–5 working days. Express delivery available. Free returns within 30 days. Items must be unworn with original tags attached.</div>
+        </div>
+      </div>
+    </div>`;
+
+  // Reviews
+  document.getElementById('rating-bars').innerHTML = BARS.map(([star,pct]) =>
+    `<div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:0.5rem">
+      <span style="font-size:0.78rem;color:var(--mid);width:30px">${star}★</span>
+      <div style="flex:1;height:6px;background:var(--light);border-radius:3px"><div style="width:${pct}%;height:100%;background:var(--gold);border-radius:3px"></div></div>
+      <span style="font-size:0.78rem;color:var(--mid);width:30px">${pct}%</span>
+    </div>`).join('');
+
+  document.getElementById('reviews-list').innerHTML = REVIEWS.map(r => `
+    <div class="review-card">
+      <div class="review-head"><span class="review-name">${r.name}</span><span class="review-date">${r.date}</span></div>
+      <div class="review-stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+      <div class="review-text">${r.text}</div>
+    </div>`).join('');
+
+  // Related
+  const related = PRODUCTS.filter(x => x.id !== p.id && (x.category === p.category)).slice(0,4);
+  const rg = document.getElementById('related-grid');
+  related.forEach(rp => {
+    const priceHTML = rp.salePrice
+      ? `<span style="color:#8b1a1a">₹${rp.salePrice.toLocaleString('en-IN')}</span> <s>₹${rp.price.toLocaleString('en-IN')}</s>`
+      : `₹${rp.price.toLocaleString('en-IN')}`;
+    const div = document.createElement('div');
+    div.className = 'product-card';
+    div.innerHTML = `
+      <div class="product-img" onclick="location.href='product.html?id=${rp.id}'">
+        <img src="${PRODUCT_IMAGES[rp.id]}" alt="${rp.name}" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy">
+        ${rp.badge?`<div class="product-badge ${rp.badge==='Sale'?'sale':''}">${rp.badge}</div>`:''}
+        <div class="product-actions">
+          <button onclick="location.href='product.html?id=${rp.id}'">View Details</button>
+        </div>
+      </div>
+      <div class="product-brand">${rp.brand}</div>
+      <div class="product-name"><a href="product.html?id=${rp.id}" style="text-decoration:none;color:inherit">${rp.name}</a></div>
+      <div class="product-price">${priceHTML}</div>`;
+    rg.appendChild(div);
+  });
+
+  updateCartBadge();
+}
+
+function switchImg(src, thumb) {
+  document.getElementById('main-img').src = src;
+  document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  thumb.classList.add('active');
+}
+function selectSize(s, btn) {
+  selectedSize = s;
+  document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function selectColor(i, el) {
+  selectedColor = i;
+  document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+}
+function changeQty(d) {
+  selectedQty = Math.max(1, selectedQty + d);
+  document.getElementById('qty-display').textContent = selectedQty;
+}
+function toggleAcc(head) {
+  const body = head.nextElementSibling;
+  body.classList.toggle('open');
+  head.querySelector('span').textContent = body.classList.contains('open') ? '−' : '+';
+}
+function addToCart() {
+  if (!selectedSize) { showToast('Please select a size'); return; }
+  const cart = getCart();
+  const ex = cart.find(c => c.id === p.id && c.size === selectedSize);
+  if (ex) ex.qty += selectedQty;
+  else cart.push({id:p.id,name:p.name,price:p.salePrice||p.price,size:selectedSize,color:p.colors[selectedColor],qty:selectedQty,img:PRODUCT_IMAGES[p.id]});
+  saveCart(cart);
+  updateCartBadge();
+  showToast(`${p.name} added to bag`);
+}
+function buyNow() {
+  if (!selectedSize) { showToast('Please select a size'); return; }
+  addToCart();
+  location.href = 'checkout.html';
+}
+
+init();
+</script>
+</body>
+</html>
