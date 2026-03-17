@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishlist — MAISON</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">MAISON</a>
+  <div class="nav-links">
+    <a href="shop.html">← Continue Shopping</a>
+  </div>
+  <div class="nav-right">
+    <a class="nav-icon" href="wishlist.html">♥</a>
+    <a class="nav-icon" href="cart.html">🛍 <span class="cart-count" id="cart-count">0</span></a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Wishlist</h1>
+  <p id="wish-sub">Your saved pieces</p>
+</div>
+
+<div id="wish-root" style="padding:2.5rem;flex:1"></div>
+
+<footer>
+  <div class="footer-bottom" style="border-top:none;padding-top:0">
+    <span>© 2025 MAISON.</span>
+    <a href="index.html" style="color:var(--gold)">← Back to Home</a>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="data.js"></script>
+<script>
+const PRODUCT_IMAGES = {1:'https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=600&q=80',2:'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&q=80',3:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80',4:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80',5:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80',6:'https://images.unsplash.com/photo-1583496661160-fb5974ca0703?w=600&q=80',7:'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&q=80',8:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&q=80',9:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',10:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80',11:'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=600&q=80',12:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80'};
+
+function render() {
+  const wish = getWishlist();
+  const root = document.getElementById('wish-root');
+  document.getElementById('wish-sub').textContent = `${wish.length} saved piece${wish.length !== 1 ? 's' : ''}`;
+
+  if (!wish.length) {
+    root.innerHTML = `<div class="empty-state">
+      <div class="icon">♡</div>
+      <h2>Your wishlist is empty</h2>
+      <p>Save pieces you love to find them easily later.</p>
+      <a class="btn-primary" href="shop.html">Explore Collection</a>
+    </div>`;
+    return;
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'product-grid';
+  wish.forEach(id => {
+    const p = PRODUCTS.find(x => x.id === id);
+    if (!p) return;
+    const priceHTML = p.salePrice
+      ? `<span style="color:#8b1a1a">₹${p.salePrice.toLocaleString('en-IN')}</span> <s>₹${p.price.toLocaleString('en-IN')}</s>`
+      : `₹${p.price.toLocaleString('en-IN')}`;
+    const div = document.createElement('div');
+    div.className = 'product-card';
+    div.innerHTML = `
+      <div class="product-img">
+        <img src="${PRODUCT_IMAGES[p.id]}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy">
+        ${p.badge ? `<div class="product-badge ${p.badge==='Sale'?'sale':''}">${p.badge}</div>` : ''}
+        <button class="wishlist-btn active" onclick="removeWish(event,${p.id})" title="Remove from wishlist">♥</button>
+        <div class="product-actions">
+          <button onclick="quickAdd(event,${p.id})">Add to Bag</button>
+          <button onclick="location.href='product.html?id=${p.id}'">View Details</button>
+        </div>
+      </div>
+      <div class="product-brand">${p.brand}</div>
+      <div class="product-name"><a href="product.html?id=${p.id}" style="text-decoration:none;color:inherit">${p.name}</a></div>
+      <div class="product-price">${priceHTML}</div>`;
+    grid.appendChild(div);
+  });
+  root.innerHTML = '';
+  root.appendChild(grid);
+  updateCartBadge();
+}
+
+function removeWish(e, id) {
+  e.stopPropagation();
+  let wish = getWishlist().filter(x => x !== id);
+  saveWishlist(wish);
+  showToast('Removed from wishlist');
+  render();
+}
+
+function quickAdd(e, id) {
+  e.stopPropagation();
+  const p = PRODUCTS.find(x => x.id === id);
+  const cart = getCart();
+  const ex = cart.find(c => c.id === p.id && c.size === p.sizes[0]);
+  if (ex) ex.qty++;
+  else cart.push({id:p.id,name:p.name,price:p.salePrice||p.price,size:p.sizes[0],color:p.colors[0],qty:1,img:PRODUCT_IMAGES[p.id]});
+  saveCart(cart);
+  updateCartBadge();
+  showToast(`${p.name} added to bag`);
+}
+
+render();
+</script>
+</body>
+</html>
