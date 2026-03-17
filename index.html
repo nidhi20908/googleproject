@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAISON — Luxury Clothing</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.hero{background:linear-gradient(135deg,#1a1714 0%,#2d2620 60%,#1a1714 100%);color:#fff;padding:6rem 2.5rem;display:flex;align-items:center;gap:4rem}
+.hero-text{flex:1}
+.hero-eyebrow{font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+.hero-title{font-family:var(--font-serif);font-size:4.5rem;font-weight:300;line-height:1.1;margin-bottom:1.5rem}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-sub{color:#aaa;line-height:1.8;margin-bottom:2rem;font-weight:300;max-width:420px}
+.hero-image{flex:1;display:flex;justify-content:center}
+.hero-img-box{width:340px;height:480px;overflow:hidden;border:1px solid rgba(184,150,12,0.3);position:relative}
+.hero-img-box img{width:100%;height:100%;object-fit:cover}
+.hero-img-box::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--gold)}
+.btn-outline-hero{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.3);padding:0.9rem 2.5rem;font-family:var(--font-sans);font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;margin-left:1rem;text-decoration:none;display:inline-block}
+.btn-outline-hero:hover{border-color:var(--gold);color:var(--gold)}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.cat-card{cursor:pointer;position:relative;overflow:hidden;aspect-ratio:3/4;transition:transform 0.3s;text-decoration:none;display:block}
+.cat-card:hover{transform:translateY(-4px)}
+.cat-card img{width:100%;height:100%;object-fit:cover;display:block}
+.cat-overlay{position:absolute;bottom:0;left:0;right:0;padding:1.5rem;background:linear-gradient(to top,rgba(26,23,20,0.9) 0%,transparent 100%)}
+.cat-label{color:#fff;font-family:var(--font-serif);font-size:1.3rem;font-weight:300;letter-spacing:0.05em}
+.cat-count{color:var(--gold);font-size:0.75rem;letter-spacing:0.1em;margin-top:0.2rem}
+.banner{background:var(--dark);color:#fff;text-align:center;padding:1rem;font-size:0.78rem;letter-spacing:0.15em}
+.banner span{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<div class="banner">FREE SHIPPING on orders over <span>₹5,000</span> · Use code <span>MAISON10</span> for 10% off</div>
+
+<nav>
+  <a class="nav-logo" href="index.html">MAISON</a>
+  <div class="nav-links">
+    <a href="shop.html">Collection</a>
+    <a href="shop.html?cat=Women">Women</a>
+    <a href="shop.html?cat=Men">Men</a>
+    <a href="shop.html?cat=Accessories">Accessories</a>
+  </div>
+  <div class="nav-right">
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" placeholder="Search..." id="nav-search" onkeydown="handleSearch(event)">
+    </div>
+    <a class="nav-icon" href="wishlist.html">♡ <span id="wish-nav"></span></a>
+    <a class="nav-icon" href="cart.html">🛍 <span class="cart-count" id="cart-count">0</span></a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow">New Season 2025</div>
+    <h1 class="hero-title">Wear the<br><em>Story</em><br>You Tell</h1>
+    <p class="hero-sub">Discover timeless pieces crafted with intention. Each garment a narrative, each stitch a commitment to enduring elegance.</p>
+    <a class="btn-primary" href="shop.html">Explore Collection</a>
+    <a class="btn-outline-hero" href="shop.html?cat=New">New Arrivals</a>
+  </div>
+  <div class="hero-image">
+    <div class="hero-img-box">
+      <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=700&q=80" alt="Luxury fashion editorial">
+    </div>
+  </div>
+</section>
+
+<div class="section">
+  <div class="section-title">Shop by Category</div>
+  <div class="section-sub">Curated collections for every occasion</div>
+  <div class="cat-grid">
+    <a class="cat-card" href="shop.html?cat=Women">
+      <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80" alt="Women">
+      <div class="cat-overlay"><div class="cat-label">Women</div><div class="cat-count">48 pieces</div></div>
+    </a>
+    <a class="cat-card" href="shop.html?cat=Men">
+      <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=600&q=80" alt="Men">
+      <div class="cat-overlay"><div class="cat-label">Men</div><div class="cat-count">36 pieces</div></div>
+    </a>
+    <a class="cat-card" href="shop.html?cat=Accessories">
+      <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80" alt="Accessories">
+      <div class="cat-overlay"><div class="cat-label">Accessories</div><div class="cat-count">24 pieces</div></div>
+    </a>
+    <a class="cat-card" href="shop.html?cat=New">
+      <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80" alt="New Arrivals">
+      <div class="cat-overlay"><div class="cat-label">New Arrivals</div><div class="cat-count">12 pieces</div></div>
+    </a>
+  </div>
+</div>
+
+<div class="section" style="background:#fff">
+  <div class="section-title">Featured Pieces</div>
+  <div class="section-sub">Hand-selected by our curators</div>
+  <div class="product-grid" id="featured-grid"></div>
+</div>
+
+<div style="background:var(--dark);color:#fff;padding:5rem 2.5rem;display:flex;align-items:center;gap:4rem">
+  <div style="flex:1">
+    <div style="font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem">Our Promise</div>
+    <h2 style="font-family:var(--font-serif);font-size:2.8rem;font-weight:300;margin-bottom:1.5rem">Crafted for<br><em style="font-style:italic;color:var(--gold)">Longevity</em></h2>
+    <p style="color:#aaa;line-height:1.9;max-width:400px;margin-bottom:2rem">Every MAISON piece is designed to last a lifetime — ethically sourced materials, skilled artisans, and quality that only gets better with age.</p>
+    <a class="btn-primary" href="shop.html">Shop Now</a>
+  </div>
+  <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+    <div style="text-align:center;padding:2rem;border:1px solid rgba(255,255,255,0.1)">
+      <div style="font-family:var(--font-serif);font-size:2.5rem;color:var(--gold)">15+</div>
+      <div style="font-size:0.78rem;letter-spacing:0.1em;color:#aaa;margin-top:0.5rem">Years of Craft</div>
+    </div>
+    <div style="text-align:center;padding:2rem;border:1px solid rgba(255,255,255,0.1)">
+      <div style="font-family:var(--font-serif);font-size:2.5rem;color:var(--gold)">100%</div>
+      <div style="font-size:0.78rem;letter-spacing:0.1em;color:#aaa;margin-top:0.5rem">Natural Fibres</div>
+    </div>
+    <div style="text-align:center;padding:2rem;border:1px solid rgba(255,255,255,0.1)">
+      <div style="font-family:var(--font-serif);font-size:2.5rem;color:var(--gold)">30</div>
+      <div style="font-size:0.78rem;letter-spacing:0.1em;color:#aaa;margin-top:0.5rem">Day Returns</div>
+    </div>
+    <div style="text-align:center;padding:2rem;border:1px solid rgba(255,255,255,0.1)">
+      <div style="font-family:var(--font-serif);font-size:2.5rem;color:var(--gold)">50k+</div>
+      <div style="font-size:0.78rem;letter-spacing:0.1em;color:#aaa;margin-top:0.5rem">Happy Clients</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="footer-brand">MAISON</div>
+      <p style="font-size:0.82rem;line-height:1.7">Luxury clothing crafted with intention and worn with purpose.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="shop.html?cat=Women">Women</a>
+      <a href="shop.html?cat=Men">Men</a>
+      <a href="shop.html?cat=Accessories">Accessories</a>
+      <a href="shop.html?cat=New">New Arrivals</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <a href="#">Sizing Guide</a>
+      <a href="#">Returns & Exchanges</a>
+      <a href="#">Shipping</a>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Follow</h4>
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+      <a href="#">TikTok</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 MAISON. All rights reserved.</span>
+    <span>Privacy · Terms · Cookies</span>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="data.js"></script>
+<script>
+const PRODUCT_IMAGES = {
+  1:'https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?w=600&q=80',
+  2:'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&q=80',
+  3:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80',
+  4:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80',
+  5:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80',
+  6:'https://images.unsplash.com/photo-1583496661160-fb5974ca0703?w=600&q=80',
+  7:'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&q=80',
+  8:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&q=80',
+  9:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&q=80',
+  10:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=80',
+  11:'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=600&q=80',
+  12:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80',
+};
+
+function renderCard(p, container) {
+  const wish = getWishlist();
+  const inWish = wish.includes(p.id);
+  const priceHTML = p.salePrice
+    ? `<span style="color:#8b1a1a">₹${p.salePrice.toLocaleString('en-IN')}</span> <s>₹${p.price.toLocaleString('en-IN')}</s>`
+    : `₹${p.price.toLocaleString('en-IN')}`;
+  const div = document.createElement('div');
+  div.className = 'product-card';
+  div.innerHTML = `
+    <div class="product-img">
+      <img src="${PRODUCT_IMAGES[p.id]}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy">
+      ${p.badge ? `<div class="product-badge ${p.badge==='Sale'?'sale':''}">${p.badge}</div>` : ''}
+      <button class="wishlist-btn ${inWish?'active':''}" onclick="toggleWish(event,${p.id},this)">${inWish?'♥':'♡'}</button>
+      <div class="product-actions">
+        <button onclick="quickAdd(event,${p.id})">Quick Add</button>
+        <button onclick="location.href='product.html?id=${p.id}'">View Details</button>
+      </div>
+    </div>
+    <div class="product-brand">${p.brand}</div>
+    <div class="product-name"><a href="product.html?id=${p.id}" style="text-decoration:none;color:inherit">${p.name}</a></div>
+    <div class="product-price">${priceHTML}</div>`;
+  container.appendChild(div);
+}
+
+function toggleWish(e, id, btn) {
+  e.stopPropagation();
+  let wish = getWishlist();
+  if (wish.includes(id)) { wish = wish.filter(x => x !== id); btn.textContent='♡'; btn.classList.remove('active'); }
+  else { wish.push(id); btn.textContent='♥'; btn.classList.add('active'); }
+  saveWishlist(wish);
+  showToast(wish.includes(id) ? 'Added to wishlist' : 'Removed from wishlist');
+}
+
+function quickAdd(e, id) {
+  e.stopPropagation();
+  const p = PRODUCTS.find(x => x.id === id);
+  const cart = getCart();
+  const ex = cart.find(c => c.id === p.id && c.size === p.sizes[0]);
+  if (ex) ex.qty++;
+  else cart.push({id:p.id,name:p.name,price:p.salePrice||p.price,size:p.sizes[0],color:p.colors[0],qty:1,img:PRODUCT_IMAGES[p.id]});
+  saveCart(cart);
+  updateCartBadge();
+  showToast(`${p.name} added to bag`);
+}
+
+function handleSearch(e) {
+  if (e.key === 'Enter') {
+    const q = document.getElementById('nav-search').value;
+    location.href = `shop.html?search=${encodeURIComponent(q)}`;
+  }
+}
+
+const grid = document.getElementById('featured-grid');
+PRODUCTS.slice(0,4).forEach(p => renderCard(p, grid));
+updateCartBadge();
+const wn = document.getElementById('wish-nav');
+if(wn) wn.textContent = getWishlist().length > 0 ? `(${getWishlist().length})` : '';
+</script>
+</body>
+</html>
